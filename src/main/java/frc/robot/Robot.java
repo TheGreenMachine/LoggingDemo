@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -30,7 +32,11 @@ public class Robot extends TimedRobot {
     var logFile = new SimpleDateFormat("MMdd_HH-mm").format(new Date());
     var robotName = System.getenv("ROBOT_NAME");
     if (robotName == null) robotName = "default";
-    var filePath = "/home/lvuser/" + robotName + "_" + logFile + ".bag";
+    var filePath = " /home/lvuser/" + robotName + "_" + logFile + ".bag";
+    // if there is a usb drive use it NOTE: must be Fat32
+    if(Files.exists(Path.of("/media/sda1"))) {
+      filePath = "/media/sda1/" + robotName + "_" + logFile + ".bag";
+    }
     if (System.getProperty("os.name").toLowerCase().contains("win")) {
       filePath = System.getenv("temp") + "\\" + robotName + "_" + logFile + ".bag";
     }
@@ -50,7 +56,7 @@ public class Robot extends TimedRobot {
 
     // Turret collapsed graph
     BadLog.createTopic("Turret/Desired", "NativeUnits", () -> mTargetPosition, "hide", "join:Turret/Position");
-    BadLog.createTopic("Turret/Actual", "NativeUnits", () -> (double) getTurretPosition(), "hide", "join:Turret/Position");
+    BadLog.createTopic("Turret/Actual", "NativeUnits", () -> (double) getTurretPosition(), "hide" , "join:Turret/Position");
     BadLog.createTopic("Turret/Error", "NativeUnits", () -> (double) mTurret.getClosedLoopError(Constants.PID_PRIMARY), "hide", "join:Turret/Error");
 
     // pigeon collapsed graph
