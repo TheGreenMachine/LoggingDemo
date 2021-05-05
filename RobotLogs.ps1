@@ -7,6 +7,7 @@ if ($rioFound) {
     & scp -p $rio`:/media/sda1/*.bag "$($logdir)\"
     Write-Host -ForegroundColor Yellow "Removing logs from roboRio"
     Start-Process -FilePath ssh -ArgumentList "$rio rm *.bag" -Wait -WindowStyle Hidden  #remove files from rio to prevent disk space issues
+    Start-Process -FilePath ssh -ArgumentList "$rio rm /media/sda1/*.bag" -Wait -WindowStyle Hidden  #remove files from rio to prevent disk space issues
 }
 Write-Host -ForegroundColor Cyan "Copying simulation logs"
 Move-Item $env:TEMP\*.bag $logdir -Force
