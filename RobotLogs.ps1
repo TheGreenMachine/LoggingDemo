@@ -15,7 +15,7 @@ directory that holds your output logs and badlogvis.exe
 how many of the most recent files to retrieve
 
 #>
-function Get-RobotLogs( $rio = 'rio', $logdir = "D:\Util\logs", $last = 1 ) {
+function GetRobotLogs( $rio = 'rio', $logdir = "D:\Util\logs", $last = 1 ) {
     $rioFound = Test-Connection $rio -Count 1 -TTL 2 -Quiet
     if ($rioFound) {
         Write-Host -ForegroundColor Cyan "Copying most recent from roboRio"
@@ -41,4 +41,6 @@ function Get-RobotLogs( $rio = 'rio', $logdir = "D:\Util\logs", $last = 1 ) {
     }
 }
 
-Get-RobotLogs
+if ($null -ne $psEditor) {
+    GetRobotLogs
+}
