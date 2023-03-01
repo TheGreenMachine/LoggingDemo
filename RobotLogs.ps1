@@ -17,17 +17,14 @@ directory that holds your output logs and badlogvis.exe. Change "D:\Util\logs" t
 how many of the most recent files to retrieve
 
 #>
-function GetRobotLogs( $rio = 'rio', $logdir = "D:\Util\logs", $last = 1 ) {
+function GetRobotLogs( $rio = '10.18.16.2', $logdir = "C:\Users\nicho\Badlog", $last = 1 ) {
     $rioFound = Test-Connection $rio -Count 1 -TTL 2 -Quiet
     Write-Host -ForegroundColor Cyan "Checking for connection to host: $rio"
     if ($rioFound) {
         Write-Host -ForegroundColor Cyan "Copying most recent from roboRio to $logdir"
-        $recent = & ssh -fq $rio ls -rt /home/lvuser/*.bag | tail -$($last)
+        $recent = & ssh -fq $rio ls -rt /home/lvuser/*.bag | Select-Object -Last $($last)
         if($recent) {
             & scp -p $rio`:$recent "$($logdir)\"
-            Write-Host -ForegroundColor Yellow "Removing logs from roboRio"
-            & ssh -fq $rio rm *.bag #remove files from rio to prevent disk space issues
-            & ssh -fq $rio rm /media/sda1/*.bag #remove files from rio to prevent disk space issues
         }
     }
     Write-Host -ForegroundColor Cyan "Copying simulation logs to $logdir"
