@@ -248,3 +248,8 @@ gradle-app.setting
 
 venv
 .idea/
+/logs
+/ctre_sim
+/networktables.json
+/simgui-ds.json
+/simgui-window.json
